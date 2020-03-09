@@ -26,24 +26,31 @@ and by the end of this course you'll wonder how you could have worked without th
    1. Pipes
    1. Output redirection
    1. Loops and pipes
-   1. Pipes continued
    1. Writing to stderr
    1. git part 1
 1. Productivity supercharged
-   1. git part 2
-   1. sshrc
    1. tools
       1. fzf - https://github.com/junegunn/fzf
-      1. tmux - https://formulae.brew.sh/formula/tmux
-      1. tmuxinator - https://github.com/tmuxinator/tmuxinator
-      1. autojump / z - https://github.com/wting/autojump
-      1. asciinema - https://asciinema.org/
 
 ### Day 2
-1. Strictly bash continued
-   1. trap
-   1. diff and <()
-   1. functional shells
+1. Dotfiles update
+1. Aliases
+1. Binding shortcuts
+1. Brace expansion
+1. Star expansion
+1. Displaying directory structure
+1. Pipes continued
+2. Redirecting
+1. git part 2
+1. trap
+1. diff and <()
+1. tools
+  1. sshrc
+  1. tmux - https://formulae.brew.sh/formula/tmux
+  1. tmuxinator - https://github.com/tmuxinator/tmuxinator
+  1. autojump / z - https://github.com/wting/autojump
+  1. functional shells
+  1. asciinema - https://asciinema.org/
 1. Big project
 1. Present your improved setup
 
@@ -626,6 +633,78 @@ And so on.
 
 </details>
 
+## Update your dofiles repository and clean up things
+
+Remember to move your `.zshrc` file to `dotfiles` repository.
+
+See what changes you made to `.bashrc`, review them, commit and push to the repository.
+
+## Aliases
+
+Aliases are a quick way to define a new version of a function.
+
+You can define a new alias by doing:
+
+```bash
+alias ll='ls -lh'
+```
+
+Now every time you run `ll` it will actually run `ls -lh`.
+
+Exercise: write an alias that lists files using their size in decreasing order, size should be human readable.
+
+## Binding shortcuts
+
+```bash
+bind '"\C-f": "echo aaa\n"'
+```
+
+## Brace expansion
+
+As seen in the "for loops" section you can use `{}` to expand values.
+
+For example:
+
+```bash
+echo {0..5}
+```
+
+Will show numbers from 0 to 5. You can also use other modes of expansion for example `,`. It does not interpolate the result but only puts the interpolated value in place.
+
+```bash
+mkdir backup_{one,two,three}
+```
+
+Will create folders `backup_one`, `backup_two`, `backup_three`.
+
+Exercise: create 24 folders with the format `YEAR-MONTH` for years 2019, 2020 and every month (from 1 to 12).
+
+Exercise 2:
+Make the same 24 directories with a structure `YEAR/MONTH` (where month is in a subfolder).
+
+Hint: `mkdir -p`
+
+## Star expansion
+
+You can use `*` to match any characters in your command. For example:
+
+```bash
+ls ./*/03
+```
+
+Executed in the directory from a previous exercise will show contents of all subfolders called "03".
+
+```
+$ ls ./*/03
+./2019/03:
+
+./2020/03:
+```
+
+## Displaying directory structure
+
+You can use `tree` command to see a hierarchical tree of directories.
+
 ## Pipes continued
 
 How can I see my unnamed pipe?
@@ -665,11 +744,27 @@ You can reed it in the manual `mkfifo(3)`
 
 > However, it has to be open at both ends simultaneously before you can proceed to do any input or output operations on it. Opening a FIFO for reading normally blocks until some other process opens the same FIFO for writing, and vice versa.
 
-Exercise - 10 min - use named pipes to solve "uppercase and reverse" problem shown before.
+Exercise - use named pipes to solve "uppercase and reverse" problem shown before.
 
-<!-- ## awk
+### Redirecting
 
-awk is a "pattern-directed scanning and processing language" -->
+To discard the output you can redirect it to virtual device `/dev/null`
+
+```bash
+echo "aaa" > /dev/null
+```
+
+Sometimes commands do not use standard output but error output to display text.
+
+This will not work:
+```
+cat not_existing > /dev/null
+```
+
+But this will:
+```
+cat not_existing 2>/dev/null
+```
 
 ## Git
 
@@ -718,8 +813,6 @@ Gradle exiting the loop after first iteration fix (you need to redirect dev null
 ./gradlew unitTest 2>/dev/null < /dev/null
 ```
 
-**LUNCH BREAK**
-
 Now we know that the improvement happened somewhere between `eb32cff78b324dfebaf5044bb53ab7a12a9d0de0`
 and `37b3f7ea7b93d7085affbbdec82aa8979b138640`
 but we don't know where exactly.
@@ -731,6 +824,10 @@ and using binary search finds the one that matches our search criteria.
 
 <details>
 <summary>Bisect script</summary>
+
+```bash
+git bisect start eb32cff78b324dfebaf5044bb53ab7a12a9d0de0 37b3f7ea7b93d7085affbbdec82aa8979b138640
+```
 
 ```bash
 #!/bin/zsh
@@ -745,64 +842,6 @@ fi
 ```
 
 </details>
-
-## sshrc
-
-Sshrc is a great script that enables you to bring your config with you when you ssh into a server.
-You can find it on https://github.com/ikuwow/sshrc.
-It's in homebrew so osx install is pretty easy:
-
-```
-brew install ikuwow/ikuwow-sshrc/sshrc
-```
-
-After that you can use it like you would `ssh`.
-
-For example:
-
-```
-sshrc slonka@s37.mydevil.net
-```
-
-You can test your setup in a docker container.
-Run an ubuntu container with a port redirect `2200` to `22`:
-
-```bash
-docker run -p 2200:22 -it ubuntu
-```
-
-Below is a one liner function that installs ssh
-and allows logging in as `root` with password `my_password`.
-It takes one argument - container name.
-
-```
-function docker-sshrcize() {
-  docker exec $1 /bin/sh -c "apt-get update -y && apt-get install -y python openssh-server && echo "root:my_password" | chpasswd && echo 'PermitRootLogin yes' > /etc/ssh/sshd_config && service ssh start"
-}
-```
-
-Example usage:
-
-```bash
-docker-sshrcize competent_zhukovsky
-```
-
-And after that you can login using:
-
-```
-sshrc root@localhost -p 2200
-```
-
-## recording a session
-
-There is a nifty tool called [asciinema](https://asciinema.org/) that allows you to record you terminal sessions
-and share them with your friends. **No more 50-MB gifs of your terminal.**
-
-Here is an example recording:
-
-[![asciicast](https://asciinema.org/a/hSNwrBhqdWYszdPNbX0FT6550.png)](https://asciinema.org/a/hSNwrBhqdWYszdPNbX0FT6550)
-
-There is also a way to record a whole tmux session - [instructions here](https://github.com/asciinema/asciinema/wiki/Recording-tmux-session).
 
 ## trap
 
@@ -855,6 +894,53 @@ Exercise - write a command that diffs the polish and english version of google.
 
 Exercise (optional) - write a command that diffs the production version of your website with a local development version.
 
+## sshrc
+
+Sshrc is a great script that enables you to bring your config with you when you ssh into a server.
+You can find it on https://github.com/ikuwow/sshrc.
+It's in homebrew so osx install is pretty easy:
+
+```
+brew install ikuwow/ikuwow-sshrc/sshrc
+```
+
+After that you can use it like you would `ssh`.
+
+For example:
+
+```
+sshrc slonka@s37.mydevil.net
+```
+
+You can test your setup in a docker container.
+Run an ubuntu container with a port redirect `2200` to `22`:
+
+```bash
+docker run -p 2200:22 -it ubuntu
+```
+
+Below is a one liner function that installs ssh
+and allows logging in as `root` with password `my_password`.
+It takes one argument - container name.
+
+```
+function docker-sshrcize() {
+  docker exec $1 /bin/sh -c "apt-get update -y && apt-get install -y python openssh-server && echo "root:my_password" | chpasswd && echo 'PermitRootLogin yes' > /etc/ssh/sshd_config && service ssh start"
+}
+```
+
+Example usage:
+
+```bash
+docker-sshrcize competent_zhukovsky
+```
+
+And after that you can login using:
+
+```
+sshrc root@localhost -p 2200
+```
+
 ## functional shell
 
 If you like functional style programming, you can use [shell-functools](https://github.com/sharkdp/shell-functools).
@@ -873,6 +959,18 @@ git rev-list --max-count=50 master | map duplicate | map -c1 format "checkout" |
 ```
 
 Exercise (optional) - rewrite yesterday's time measuring script into functional style.
+
+## recording a session
+
+There is a nifty tool called [asciinema](https://asciinema.org/) that allows you to record you terminal sessions
+and share them with your friends. **No more 50-MB gifs of your terminal.**
+
+Here is an example recording:
+
+[![asciicast](https://asciinema.org/a/hSNwrBhqdWYszdPNbX0FT6550.png)](https://asciinema.org/a/hSNwrBhqdWYszdPNbX0FT6550)
+
+There is also a way to record a whole tmux session - [instructions here](https://github.com/asciinema/asciinema/wiki/Recording-tmux-session).
+
 
 ## Big project
 
