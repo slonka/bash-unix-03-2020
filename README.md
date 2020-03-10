@@ -667,11 +667,53 @@ Extracting a tarball:
 tar xzf myarchive.tar.gz
 ```
 
+## Sort
+
+`sort` command will sort a file
+
+a.txt:
+```
+a
+b
+c
+a
+b
+a
+a
+a
+```
+
+```bash
+sort a.txt
+```
+
+## Uniq
+
+`uniq` command will remove duplicated lines from a file.
+
 ## Binding shortcuts
+
+Bash:
 
 ```bash
 bind '"\C-f": "echo aaa\n"'
 ```
+
+Zsh:
+
+```zsh
+a() {
+  echo "a"
+  echo "" # sometimes you need to add empty space
+  echo ""
+  zle redisplay
+}
+
+zle -N a
+bindkey ^f a
+```
+
+Exercise: find the most common used command in you command history and bind it to a key.
 
 ## Brace expansion
 
