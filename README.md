@@ -955,6 +955,24 @@ And after that you can login using:
 sshrc root@localhost -p 2200
 ```
 
+## tmux
+
+```
+brew install tmux
+```
+
+## tmuxinator
+
+```
+brew install tmuxinator
+```
+
+## autojump
+
+```
+brew install autojump
+```
+
 ## functional shell
 
 If you like functional style programming, you can use [shell-functools](https://github.com/sharkdp/shell-functools).
