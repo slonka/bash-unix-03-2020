@@ -653,6 +653,20 @@ Now every time you run `ll` it will actually run `ls -lh`.
 
 Exercise: write an alias that lists files using their size in decreasing order, size should be human readable.
 
+## Tar
+
+Creating a tarball:
+
+```
+tar pczf myarchive.tar.gz ~/mydocuments
+```
+
+Extracting a tarball:
+
+```
+tar xzf myarchive.tar.gz
+```
+
 ## Binding shortcuts
 
 ```bash
@@ -979,3 +993,13 @@ It might be:
 - something from your `sshrc` config, like making your favourite programs portable (fzf for example)
 - writing a script that synchronizes command history
 - tmuxinator config for fast ssh-ing into multiple machines
+
+### Files backup project idea:
+
+Create a project to back up your most important files.
+Goals:
+- Files have to be backed up to a secure server of your choice ([google drive](https://developers.google.com/drive/api/v3/manage-uploads#simple), [dropbox](https://www.dropbox.com/developers/documentation/http/documentation), [microsoft OneDrive](https://github.com/fkalis/bash-onedrive-upload)) or an ssh server
+- Files have to be compressed and encrypted
+- Files have to be rotated (when you upload a new one, the old one has to be renamed / deleted)
+- You can define list of directories that will be uploaded (either via arguments list or config file)
+- Files have to be uploaded in some time interval (daily, weekly, monthly)
