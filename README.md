@@ -633,6 +633,20 @@ And so on.
 
 </details>
 
+## Git
+
+To combine all the things we learned so far we're going to create a statistic.
+Suppose you're working on a project where you use a tool called `Envoy`.
+You want to upgrade to a new version but you do not know how dangerous it is.
+Fortunately Envoy maintainers keep "Risk Level" description in every pull request, e.g. https://github.com/envoyproxy/envoy/pull/10285.
+Write a script that counts how many times a "high risk" and "medium risk" pull request has been merged from a version you are currently using `v1.13.0` to the version `v1.13.1`.
+
+Useful commands:
+
+```
+git log --oneline
+```
+
 ## Update your dofiles repository and clean up things
 
 Remember to move your `.zshrc` file to `dotfiles` repository.
@@ -691,6 +705,22 @@ sort a.txt
 
 `uniq` command will remove duplicated lines from a file.
 
+a.txt:
+```
+a
+b
+c
+a
+b
+a
+a
+a
+```
+
+```bash
+uniq a.txt
+```
+
 ## Binding shortcuts
 
 Bash:
@@ -737,8 +767,6 @@ Exercise: create 24 folders with the format `YEAR-MONTH` for years 2019, 2020 an
 
 Exercise 2:
 Make the same 24 directories with a structure `YEAR/MONTH` (where month is in a subfolder).
-
-Hint: `mkdir -p`
 
 ## Star expansion
 
@@ -822,21 +850,7 @@ But this will:
 cat not_existing 2>/dev/null
 ```
 
-## Git
-
-To combine all the things we learned so far we're going to create a statistic.
-Suppose you're working on a project where you use a tool called `Envoy`.
-You want to upgrade to a new version but you do not know how dangerous it is.
-Fortunately Envoy maintainers keep "Risk Level" description in every pull request, e.g. https://github.com/envoyproxy/envoy/pull/10285.
-Write a script that counts how many times a "high risk" and "medium risk" pull request has been merged from a version you are currently using `v1.13.0` to the version `v1.13.1`.
-
-Useful commands:
-
-```
-git log --oneline
-```
-
-### Additional
+## Git continued
 
 To combine all the things we learned so far we're going to create a simple chart.
 The chart will show 10 commits in 5 commit interval starting from the oldest,
